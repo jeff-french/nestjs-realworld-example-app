@@ -14,7 +14,7 @@ pipeline {
                 script {
                     docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
                         sh """
-                            cat << EOF > ormconfig.json
+                            cat <<- EOF > ormconfig.json
                             {
                               "type": "mysql",
                               "host": "localhost",
