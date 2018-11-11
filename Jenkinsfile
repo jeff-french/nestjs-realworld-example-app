@@ -19,18 +19,18 @@ pipeline {
                         }
 
                         sh """
-                            cat <<- EOF > ormconfig.json
-                            {
-                              "type": "mysql",
-                              "host": "localhost",
-                              "port": ${c.port(3306)},
-                              "username": "realworld",
-                              "password": "password",
-                              "database": "realworld",
-                              "entities": ["src/**/**.entity{.ts,.js}"],
-                              "synchronize": true
-                            }
-                            EOF
+                            cat << EOF > ormconfig.json
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port": ${c.port(3306)},
+  "username": "realworld",
+  "password": "password",
+  "database": "realworld",
+  "entities": ["src/**/**.entity{.ts,.js}"],
+  "synchronize": true
+}
+EOF
                         """
                         sh 'ls -al'
                         sh 'cat ormconfig.json'
