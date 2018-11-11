@@ -12,7 +12,6 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh 'whoami'
                     docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
                         sh """
                             cat << EOF > ormconfig.json
@@ -28,6 +27,8 @@ pipeline {
                             }
                             EOF
                         """
+                        sh 'ls -al'
+                        sh 'cat ormconfig.json'
                         nodejs('node-10-lts') {
                             sh 'npm test'
                         }
