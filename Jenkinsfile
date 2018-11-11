@@ -4,9 +4,11 @@ pipeline {
     stages {
         stage('WTF') {
             steps {
-                nginx = docker.image('nginx:latest')
-                nginx.withRun() { c ->
-                    sh "Nginx running on ${c.port(80)}..."
+                script {
+                    nginx = docker.image('nginx:latest')
+                    nginx.withRun() { c ->
+                        sh "Nginx running on ${c.port(80)}..."
+                    }
                 }
             }
         }
@@ -21,7 +23,6 @@ pipeline {
             steps {
                 node {
                     nodejs('node-10-lts') {
-
 
                         docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
                             sh """
