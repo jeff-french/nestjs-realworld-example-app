@@ -13,6 +13,11 @@ pipeline {
             steps {
                 script {
                     docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
+                        docker.image('mysql:5').inside("--link ${c.id}:db") {
+                            /* Wait until mysql service is up */
+                            sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
+                        }
+
                         sh """
                             cat <<- EOF > ormconfig.json
                             {
