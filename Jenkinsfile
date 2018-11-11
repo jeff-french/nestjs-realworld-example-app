@@ -17,7 +17,7 @@ pipeline {
                     {
                       "type": "mysql",
                       "host": "localhost",
-                      "port": ${c.port(3306},
+                      "port": ${c.port(3306)},
                       "username": "realworld",
                       "password": "password",
                       "database": "realworld",
