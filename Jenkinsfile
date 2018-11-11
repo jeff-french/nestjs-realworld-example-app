@@ -32,8 +32,7 @@ pipeline {
 }
 EOF
                         """
-                        sh 'ls -al'
-                        sh 'cat ormconfig.json'
+                        sh 'cp src/config.ts.example src/config.ts'
                         nodejs('node-10-lts') {
                             sh 'npm test'
                         }
