@@ -11,26 +11,26 @@ pipeline {
         }
         stage('Test') {
             steps {
-                docker.image('nginx:latest').withRun() { c ->
-                    sh "Nginx running on ${c.port(80)}..."
-                }
+                nodejs('node-10-lts') {
+                    docker.image('nginx:latest').withRun() { c ->
+                        sh "Nginx running on ${c.port(80)}..."
+                    }
 
-                docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
-                    sh """
-                        cat < EOF > ormconfig.json
-                        {
-                          "type": "mysql",
-                          "host": "localhost",
-                          "port": ${c.port(3306)},
-                          "username": "realworld",
-                          "password": "password",
-                          "database": "realworld",
-                          "entities": ["src/**/**.entity{.ts,.js}"],
-                          "synchronize": true
-                        }
-                        EOF
-                    """
-                    nodejs('node-10-lts') {
+                    docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
+                        sh """
+                            cat < EOF > ormconfig.json
+                            {
+                              "type": "mysql",
+                              "host": "localhost",
+                              "port": ${c.port(3306)},
+                              "username": "realworld",
+                              "password": "password",
+                              "database": "realworld",
+                              "entities": ["src/**/**.entity{.ts,.js}"],
+                              "synchronize": true
+                            }
+                            EOF
+                        """
                         sh 'npm test'
                     }
                 }
