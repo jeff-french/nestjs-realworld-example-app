@@ -8,7 +8,7 @@
     "start:watch": "nodemon",
     "prestart:prod": "tsc",
     "start:prod": "node dist/main.js",
-    "test": "jest --config=jest.json",
+    "test": "jest --config=jest.json --forceExit",
     "test:watch": "jest --watch --config=jest.json",
     "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage"
   },
@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/jest": "^22.1.3",
     "@types/node": "^9.4.6",
-    "jest": "^22.4.2",
+    "jest": "^23.6.0",
     "nodemon": "^1.15.0",
     "supertest": "^3.0.0",
     "ts-jest": "^22.0.4",
