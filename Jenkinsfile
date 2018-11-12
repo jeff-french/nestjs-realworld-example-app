@@ -1,4 +1,4 @@
-def shortCommit = 'UNKNOWN'
+def GIT_COMMIT = 'UNKNOWN'
 
 pipeline {
     agent any
@@ -50,11 +50,12 @@ EOF
         }
         stage('Package Artifacts') {
             steps {
-                withCheckout(scm) {
-                    sh "tar -czf api-${env.GIT_COMMIT}.tar.gz * --exlclude .git --exclude coverage"
-                    archiveArtifacts artifacts: "api-${env.GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
-                    s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${env.GIT_COMMIT}.tar.gz', path: 'api/'
+                script {
+                    GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true )
                 }
+                sh "tar -czf api-${GIT_COMMIT}.tar.gz * --exclude .git --exclude coverage"
+                archiveArtifacts artifacts: "api-${GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
+                s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${GIT_COMMIT}.tar.gz', path: 'api/'
             }
         }
     }
