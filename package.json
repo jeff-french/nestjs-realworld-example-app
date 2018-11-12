@@ -10,7 +10,7 @@
     "start:prod": "node dist/main.js",
     "test": "jest --config=jest.json --forceExit",
     "test:watch": "jest --watch --config=jest.json",
-    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage"
+    "test:coverage": "jest --config=jest.json --coverage --coverageDirectory=coverage --forceExit"
   },
   "repository": {
     "type": "git",

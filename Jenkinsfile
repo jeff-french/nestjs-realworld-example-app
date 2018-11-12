@@ -10,6 +10,9 @@ pipeline {
             }
         }
         stage('Test') {
+            when {
+                expression { false == true }
+            }
             steps {
                 script {
                     docker.image('mysql:5.7').withRun('-e "MYSQL_USER=realworld" -e "MYSQL_PASSWORD=password" -e "MYSQL_DATABASE=realworld" -e "MYSQL_RANDOM_ROOT_PASSWORD=yes" -P') { c ->
