@@ -9,16 +9,8 @@ pipeline {
     }
 
     stages {
-        stage ('Prepare Variables') {
-            steps {
-                script {
-                    shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-                }
-            }
-        }
         stage('Build') {
             steps {
-                echo "${shortCommit}"
                 sh 'npm install'
             }
         }
@@ -58,9 +50,13 @@ EOF
         }
         stage('Package Artifacts') {
             steps {
-                sh "tar -czf api-${shortCommit}.tar.gz * --exlclude .git --exclude coverage"
-                archiveArtifacts artifacts: "api-${shortCommit}.zip", fingerprint: true, onlyIfSuccessful: true
-                s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${shortCommit}.tar.gz', path: 'api/'
+                node {
+                    withCheckout(scm) {
+                        sh "tar -czf api-${env.GIT_COMMIT}.tar.gz * --exlclude .git --exclude coverage"
+                        archiveArtifacts artifacts: "api-${env.GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
+                        s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${env.GIT_COMMIT}.tar.gz', path: 'api/'
+                    }
+                }
             }
         }
     }
