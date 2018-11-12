@@ -1,12 +1,16 @@
-def shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-
 pipeline {
     agent any
+
+    environment {
+        shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+    }
 
     stages {
         stage('Build') {
             steps {
                 nodejs('node-10-lts') {
+                    echo "${shortCommit}"
+                    echo "${env.shortCommit}"
                     sh 'npm install'
                 }
             }
