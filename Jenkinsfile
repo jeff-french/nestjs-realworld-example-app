@@ -58,7 +58,7 @@ EOF
                     tar -czf api-${GIT_COMMIT}.tar.gz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tar.gz
                 """
                 archiveArtifacts artifacts: "api-${GIT_COMMIT}.tar.gz", fingerprint: true, onlyIfSuccessful: true
-                s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${GIT_COMMIT}.tar.gz', path: 'api/'
+                s3Upload acl: 'Private', bucket: 'upli-builds', file: "api-${GIT_COMMIT}.tar.gz", path: 'api/'
             }
         }
     }
