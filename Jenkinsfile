@@ -50,12 +50,10 @@ EOF
         }
         stage('Package Artifacts') {
             steps {
-                node {
-                    withCheckout(scm) {
-                        sh "tar -czf api-${env.GIT_COMMIT}.tar.gz * --exlclude .git --exclude coverage"
-                        archiveArtifacts artifacts: "api-${env.GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
-                        s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${env.GIT_COMMIT}.tar.gz', path: 'api/'
-                    }
+                withCheckout(scm) {
+                    sh "tar -czf api-${env.GIT_COMMIT}.tar.gz * --exlclude .git --exclude coverage"
+                    archiveArtifacts artifacts: "api-${env.GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
+                    s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${env.GIT_COMMIT}.tar.gz', path: 'api/'
                 }
             }
         }
