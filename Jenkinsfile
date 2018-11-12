@@ -4,12 +4,15 @@ pipeline {
     agent any
 
     tools {
-      git 'Default'
+      git 'system'
       nodejs 'node-10-lts'
     }
 
     stages {
         stage('Build') {
+            when {
+                expression { false == true }
+            }
             steps {
                 sh 'npm install'
             }
@@ -49,9 +52,6 @@ EOF
             }
         }
         stage('Package Artifacts') {
-            tools {
-              git 'Default'
-            }
             steps {
                 sh 'echo $PATH'
                 sh 'which git'
