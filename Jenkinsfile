@@ -10,9 +10,6 @@ pipeline {
 
     stages {
         stage('Build') {
-            when {
-                expression { false == true }
-            }
             steps {
                 sh 'npm install'
             }
@@ -53,13 +50,14 @@ EOF
         }
         stage('Package Artifacts') {
             steps {
-                sh 'echo $PATH'
-                sh 'which git'
                 script {
-                    GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true )
+                    GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true ).trim()
                 }
-                sh "tar -czf api-${GIT_COMMIT}.tar.gz * --exclude .git --exclude coverage"
-                archiveArtifacts artifacts: "api-${GIT_COMMIT}.zip", fingerprint: true, onlyIfSuccessful: true
+                sh """
+                    touch api-${GIT_COMMIT}.tar.gz
+                    tar -czf api-${GIT_COMMIT}.tar.gz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tar.gz
+                """
+                archiveArtifacts artifacts: "api-${GIT_COMMIT}.tar.gz", fingerprint: true, onlyIfSuccessful: true
                 s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${GIT_COMMIT}.tar.gz', path: 'api/'
             }
         }
