@@ -1,5 +1,7 @@
 pipeline {
     agent any
+    checkout scm
+    shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 
     stages {
         stage('Build') {
@@ -45,7 +47,9 @@ EOF
         }
         stage('Package Artifacts') {
             steps {
-                archiveArtifacts artifacts: '*', excludes: '.git/', fingerprint: true, onlyIfSuccessful: true
+                sh "tar -czf api-${shortCommit}.tar.gz * --exlclude .git --exclude coverage"
+                archiveArtifacts artifacts: "api-${shortCommit}.zip", fingerprint: true, onlyIfSuccessful: true
+                s3Upload acl: 'Private', bucket: 'upli-builds', file: 'api-${shortCommit}.tar.gz', path: 'api/'
             }
         }
     }
