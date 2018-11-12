@@ -49,7 +49,12 @@ EOF
             }
         }
         stage('Package Artifacts') {
+            tools {
+              git 'Default'
+            }
             steps {
+                sh 'echo $PATH'
+                sh 'which git'
                 script {
                     GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true )
                 }
