@@ -1,4 +1,4 @@
-dev shortCommit = 'UNKNOWN'
+def shortCommit = 'UNKNOWN'
 
 pipeline {
     agent any
