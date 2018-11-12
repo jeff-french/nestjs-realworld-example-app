@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 
     stages {
+        shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
         stage('Build') {
             steps {
                 nodejs('node-10-lts') {
