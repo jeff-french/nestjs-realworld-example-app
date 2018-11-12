@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+      git 'Default'
+      nodejs 'node-10-lts'
+    }
+
     environment {
         shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
     }
@@ -8,11 +13,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                nodejs('node-10-lts') {
-                    echo "${shortCommit}"
-                    echo "${env.shortCommit}"
-                    sh 'npm install'
-                }
+                echo "${shortCommit}"
+                echo "${env.shortCommit}"
+                sh 'npm install'
             }
         }
         stage('Test') {
