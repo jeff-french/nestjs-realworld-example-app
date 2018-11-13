@@ -61,5 +61,10 @@ EOF
                 s3Upload acl: 'Private', bucket: 'upli-builds', file: "api-${GIT_COMMIT}.tgz", path: 'api/'
             }
         }
+        stage('Clean Up') {
+            steps {
+                cleanWs notFailBuild: true
+            }
+        }
     }
 }
