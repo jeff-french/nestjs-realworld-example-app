@@ -1,5 +1,7 @@
 #!/bin/bash
 
-sudo su - ec2-user
+set -exuo pipefail
+
+source /home/ec2-user/.bash_profile
+
 pm2 stop api
-exit

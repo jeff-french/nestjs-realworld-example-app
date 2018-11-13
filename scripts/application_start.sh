@@ -1,13 +1,8 @@
 #!/bin/bash
 
-set -euo pipefail
+set -exuo pipefail
 
-set -x
+source /home/ec2-user/.bash_profile
 
-whoami
-sudo su - ec2-user
-whoami
 npm run prestart:prod
 pm2 start dist/main.js --name api
-exit
-whoami
