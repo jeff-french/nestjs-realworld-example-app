@@ -48,17 +48,17 @@ EOF
                 }
             }
         }
-        stage('Package Artifacts') {
+        stage('Publish Artifacts') {
             steps {
                 script {
                     GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true ).trim()
                 }
                 sh """
                     touch api-${GIT_COMMIT}.tar.gz
-                    tar -czf api-${GIT_COMMIT}.tar.gz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tar.gz
+                    tar -czf api-${GIT_COMMIT}.tgz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tgz
                 """
-                archiveArtifacts artifacts: "api-${GIT_COMMIT}.tar.gz", fingerprint: true, onlyIfSuccessful: true
-                s3Upload acl: 'Private', bucket: 'upli-builds', file: "api-${GIT_COMMIT}.tar.gz", path: 'api/'
+                archiveArtifacts artifacts: "api-${GIT_COMMIT}.tgz", fingerprint: true, onlyIfSuccessful: true
+                s3Upload acl: 'Private', bucket: 'upli-builds', file: "api-${GIT_COMMIT}.tgz", path: 'api/'
             }
         }
     }
