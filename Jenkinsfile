@@ -55,7 +55,7 @@ EOF
                 }
                 sh """
                     touch api-${GIT_COMMIT}.tgz
-                    tar -czf api-${GIT_COMMIT}.tgz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tgz
+                    tar -czf api-${GIT_COMMIT}.tgz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tgz --exclude ormconfig.json --exclude src/config.ts
                 """
                 archiveArtifacts artifacts: "api-${GIT_COMMIT}.tgz", fingerprint: true, onlyIfSuccessful: true
                 s3Upload acl: 'Private', bucket: 'upli-builds', file: "api-${GIT_COMMIT}.tgz", path: 'api/'
