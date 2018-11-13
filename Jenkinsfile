@@ -54,7 +54,7 @@ EOF
                     GIT_COMMIT = sh( script: 'git rev-parse HEAD', returnStdout: true ).trim()
                 }
                 sh """
-                    touch api-${GIT_COMMIT}.tar.gz
+                    touch api-${GIT_COMMIT}.tgz
                     tar -czf api-${GIT_COMMIT}.tgz . --exclude .git --exclude coverage --exclude api-${GIT_COMMIT}.tgz
                 """
                 archiveArtifacts artifacts: "api-${GIT_COMMIT}.tgz", fingerprint: true, onlyIfSuccessful: true
